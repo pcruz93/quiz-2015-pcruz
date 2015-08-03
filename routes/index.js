@@ -8,8 +8,14 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz' });
 });
 
+// Autor
 router.get('/author',function(req,res){
   res.render('author',{ title:'Quiz', nombre: 'Pedro Cruz (@pcruz93)'})
+});
+
+// Busqueda
+router.get('/search', function(req, res) {
+  res.render('search', { title: 'Buscar preguntas' });
 });
 
 // Autoload de comandos con :quizId

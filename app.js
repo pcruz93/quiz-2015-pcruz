@@ -21,27 +21,40 @@ app.set('view engine', 'ejs');
 app.use(partials());
 
 // uncomment after placing your favicon in /public
-app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser('Quiz 2015'));
-app.use(session());
-
+app.use(cookieParser('Quiz 2015')); // esta cadena es para encriptar la cookie de sesión
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session());
 
 // Helpers dinamicos:
-app.use(function(req, res, next) {
-
-  // guardar path en session.redir para despues de login
-  if (!req.path.match(/\/login|\/logout/)) {
-    req.session.redir = req.path;
-  }
-
-  // Hacer visible req.session en las vistas
-  res.locals.session = req.session;
-  next();
+app.use(function(req, res, next){
+	
+	// guardar path en session.redir para despues de login
+	if(!req.path.match(/\/login|\/logout/)){
+		req.session.redir = req.path;
+	}
+	
+	// guarda la fecha para el autologout
+	if(req.session.user){
+		if(typeof(req.session.lastCon) !== 'undefined' && (Date.now() - req.session.lastCon) > 120000){ // dos minutos
+			delete req.session.user;
+			delete req.session.lastCon;
+			req.session.errors = [
+				{   'message': 'Su sesión ha expirado' }
+			];
+			res.redirect('/login');
+		}
+		req.session.lastCon = Date.now();
+	}
+	
+	// hace visible req.session en las vistas
+	res.locals.session = req.session;
+	
+	next();
 });
 
 app.use('/', routes);

@@ -13,38 +13,36 @@
         href='/stylesheets/smartphone.css' />
 
 </head>
-
-<body>
-<div id="page-wrap">
-  <header class="main" id="h1">
-    <%if(!session.user){%>
-      <span class="right"><a href="/login">Login</a></span>
-    <%}else{%>
-      <span class="right"> <%=session.user.username%> <a href="/logout">Logout</a></span>
-    <%}%>
-    
-    <h2>Quiz<span>: el juego de las preguntas</span></h2>
+  <body>
+  <div id="page-wrap">
+  	<header class="main" id="h1">
+  		<% if(!session.user){ %>
+  			<span class="right"><a href="/login">Login</a></span>
+  		<% }else{ %>
+  			<span class="right"><%= session.user.username %><a href="/logout">Logout</a></span>
+  		<% } %>
+  		
+  		<h2>Quiz: <span>El juego de las preguntas</span></h2>
   </header>
 
-  <nav class="main" id="n1" role="navigation">
-    <span><a href="/">Inicio</a></span>
-    <span><a href="/quizes">Preguntas</a></span>
-    <span><a href="/search">Buscar</a></span>
-    <span><a href="/author">Acerca de</a></span>
+  <nav class="main" role="navigation" id="n1">
+  		<span><a href="/">Inicio</a></span>
+  		<span><a href="/quizes">Preguntas</a></span>
+  		<span><a href="/quizes/statistics">Estadísticas</a></span>
+  		<span><a href="/author">Créditos</a></span>
   </nav>
 
   <section class="main" id="s1">
-   <% if (errors.length) { %>
-      <span id='ErrorMsgs'>
-        Corregir errores:<br/>
-        <% for (var i in errors) { %>
-           <span> <%= errors[i].message %> </span><br/>
-        <% } %>
-      </span>
-    <% } %>
-
-    <div><%- body %></div>
-  </section>
+  		<% if(errors.length){ %>
+  			<p id="errorMsgs">
+  				Corregir errores: <br>
+  				<% for(var i in errors){ %>
+  				<span><%= errors[i].message %></span><br>
+  				<% } %>
+  			</p>
+  		<% } %>
+  		<%- body %>
+  	</section>
 
   <footer class="main" id="f1">
     <a href="http://es.wikipedia.org/wiki/Quiz">
